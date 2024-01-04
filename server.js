@@ -1,13 +1,18 @@
 var express = require('express');
-const pino = require('pino');
-
+var path = require('path');
+var fs = require('fs');
 var app = express();
 
-const logger = pino({ level: 'info' });
+app.get('/', function (req, res) {
+    res.sendFile(path.join(__dirname, "index.html"));
+});
 
-logger.info('hello world');
-logger.info('This is a nodejs app for testing');
+app.get('/profile-picture', function (req, res) {
+    var img = fs.readFileSync('profile-1.jpg');
+    res.writeHead(200, { 'Content-Type': 'image/jpeg' });
+    res.end(img, 'binary');
+});
 
 app.listen(3000, function () {
-    logger.info("app listening on port 3000!");
+    console.log("App listening on port 3000!");
 });
